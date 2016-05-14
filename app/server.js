@@ -7,7 +7,7 @@ var app;
 try {
   config = require('../conf/configuration');
 } catch (err) {
-  console.error('Configuration file not found!');
+  console.error('Could not load conf/configuration.js!');
   process.exit(1);
 }
 // Start the application

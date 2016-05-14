@@ -2,12 +2,15 @@
 const config = {
   // Path where the API will be accessed from the browser
   base: '/',
-  // Protocol and host to be shown when response contains URLs
-  protocol: 'http',
-  host: '127.0.0.1',
   // Port which the API server will run on
   port: 3000,
   // Different modes: 'production', 'development'
-  env: 'development'
+  env: 'development',
+  // Front-end settings, for obtaining URLs
+  frontend: {
+    protocol: 'http',
+    host: '127.0.0.1',
+    port: '3000'
+  }
 };
 module.exports = config;
