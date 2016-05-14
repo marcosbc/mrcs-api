@@ -10,7 +10,7 @@ var utils = {
     var url = `${protocol}://${host}`;
     if ((protocol === 'http' && port !== 80) ||
         (protocol === 'https' && port !== 443)) {
-      url += ':' + config.port;
+      url += ':' + port;
     }
     url += config.base;
     return url;
