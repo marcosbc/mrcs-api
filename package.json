@@ -2,7 +2,7 @@
   "name": "mrcs-api",
   "version": "0.0.1",
   "description": "API for creating simple and timed notifications",
-  "main": "app.js",
+  "main": "app/server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -19,5 +19,10 @@
   "bugs": {
     "url": "https://github.com/marcosbc/mrcs-api/issues"
   },
-  "homepage": "https://github.com/marcosbc/mrcs-api#readme"
+  "homepage": "https://github.com/marcosbc/mrcs-api#readme",
+  "dependencies": {
+    "body-parser": "^1.15.1",
+    "express": "^4.13.4",
+    "morgan": "^1.7.0"
+  }
 }
