@@ -10,7 +10,9 @@ const config = {
   frontend: {
     protocol: 'http',
     host: '127.0.0.1',
-    port: '3000'
-  }
+    port: 3000
+  },
+  // MongoDB connection string
+  mongoDbUri: 'mongodb://api:api@127.0.0.1:27017/api'
 };
 module.exports = config;

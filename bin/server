@@ -1,0 +1,3 @@
+#!/bin/sh
+DIR="$( cd "$( dirname "$( dirname "${BASH_SOURCE[0]}" )" )" && pwd )"
+node $DIR/app/server.js >>$DIR/logs/access.log 2>>$DIR/logs/error.log
