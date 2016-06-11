@@ -24,7 +24,7 @@ class SecurityFunctions {
   }
   decryptText (str) {
     var decipher = crypto.createDecipher('aes-256-cbc', secret);
-    return decipher.update(str, 'base64', 'utf8') + cipher.final('utf8');
+    return decipher.update(str, 'base64', 'utf8') + decipher.final('utf8');
   }
 }
 // Export the previously created class

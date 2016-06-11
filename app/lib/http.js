@@ -1,7 +1,6 @@
 'use strict';
 // Dependencies
 var _ = require('underscore');
-var bcrypt = require('bcrypt-nodejs');
 var config;
 // Object of common-usage functions
 class HttpFunctions {

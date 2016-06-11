@@ -7,10 +7,8 @@ var morgan = require('morgan');
 var mongoose = require('mongoose');
 // Variables to use
 var utils;
-var boot;
 var config;
 var app;
-var dbConnection;
 // Try to load configuration file
 try {
   config = require('../conf/configuration');
@@ -31,7 +29,7 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(morgan('combined'));
 // Create the MongoDB connection
-dbConnection = mongoose.connect(config.mongoDbUri);
+mongoose.connect(config.mongoDbUri);
 // Populate controllers into the Express instance
 _.each(utils.controllers.getControllers(), (controller) => {
   app[controller.method](controller.path, controller.handler);
