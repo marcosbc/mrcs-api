@@ -1,5 +1,6 @@
 node_modules/
 logs/
 conf/configuration.js
+docker-compose.yml
 .DS_Store
 .*.swp

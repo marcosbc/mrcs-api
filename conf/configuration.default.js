@@ -13,6 +13,6 @@ const config = {
     port: 3000
   },
   // MongoDB connection string
-  mongoDbUri: 'mongodb://api:api@127.0.0.1:27017/api'
+  mongoDbUri: 'mongodb://api:api@mongodb:27017/api'
 };
 module.exports = config;

@@ -5,6 +5,7 @@ var express = require('express');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
 var mongoose = require('mongoose');
+var waitForMongo = require('wait-for-mongo');
 // Variables to use
 var utils;
 var config;
@@ -29,7 +30,13 @@ app.use(bodyParser.urlencoded({
 }));
 app.use(morgan('combined'));
 // Create the MongoDB connection
-mongoose.connect(config.mongoDbUri);
+waitForMongo(config.mongoDbUri, {timeout: 1000 * 60 * 2}, function (err) {
+  if (err) {
+    console.error('Timeout exceeded connecting to MongoDB');
+    process.exit(1);
+  }
+  mongoose.connect(config.mongoDbUri);
+});
 // Populate controllers into the Express instance
 _.each(utils.controllers.getControllers(), (controller) => {
   app[controller.method](controller.path, controller.handler);
