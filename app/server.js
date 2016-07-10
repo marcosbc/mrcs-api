@@ -2,6 +2,7 @@
 // Dependencies
 var _ = require('underscore');
 var express = require('express');
+var expressValidator = require('express-validator');
 var bodyParser = require('body-parser');
 var morgan = require('morgan');
 var mongoose = require('mongoose');
@@ -28,6 +29,10 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({
   extended: true
 }));
+app.use(expressValidator({
+  customValidators: utils.validators.customValidators,
+  customSanitizers: utils.validators.customSanitizers
+}));
 app.use(morgan('combined'));
 // Create the MongoDB connection
 waitForMongo(config.mongoDbUri, {timeout: 1000 * 60 * 2}, function (err) {
@@ -43,8 +48,19 @@ _.each(utils.controllers.getControllers(), (controller) => {
 });
 // Error handling
 app.use((error, req, res, next) => {
-  console.error(error.stack);
-  res.status(500).json(utils.http.getHttpError(500, 'Internal server error'));
+  var statusCode;
+  var statusMessage;
+  switch (error.statusCode) {
+    case 400:
+      statusCode = error.statusCode;
+      statusMessage = 'Bad request';
+      break;
+    default:
+      statusCode = 500;
+      statusMessage = 'Internal server error';
+      console.error(error.stack);
+  }
+  res.status(statusCode).json(utils.http.getHttpError(statusCode, statusMessage));
 });
 app.use((req, res, next) => {
   res.status(404).json(utils.http.getHttpError(404, 'Not found'));

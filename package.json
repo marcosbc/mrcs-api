@@ -25,9 +25,11 @@
     "bcrypt-nodejs": "0.0.3",
     "body-parser": "^1.15.1",
     "express": "^4.13.4",
+    "express-validator": "^2.20.8",
     "mongoose": "^4.4.17",
     "morgan": "^1.7.0",
     "underscore": "^1.8.3",
+    "validator": "^5.4.0",
     "wait-for-mongo": "^0.2.0"
   }
 }
