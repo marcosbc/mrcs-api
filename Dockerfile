@@ -1,9 +1,9 @@
 ## BUILDING
 ##   (from project root directory)
-##   $ docker build -t node-js-6-3-0-on-ubuntu .
+##   $ docker build -t marcosbc-mrcs-api .
 ##
 ## RUNNING
-##   $ docker run -p 3000:3000 node-js-6-3-0-on-ubuntu
+##   $ docker run -p 3000:3000 marcosbc-mrcs-api
 ##
 ## CONNECTING
 ##   Lookup the IP of your active docker host using:
@@ -15,14 +15,16 @@ FROM gcr.io/stacksmith-images/ubuntu-buildpack:14.04-r07
 
 MAINTAINER Bitnami <containers@bitnami.com>
 
-ENV STACKSMITH_STACK_ID="t4sqxym" \
-    STACKSMITH_STACK_NAME="Node.js 6.3.0 on Ubuntu" \
+ENV STACKSMITH_STACK_ID="uljqh28" \
+    STACKSMITH_STACK_NAME="marcosbc/mrcs-api" \
     STACKSMITH_STACK_PRIVATE="1"
 
 RUN bitnami-pkg install node-6.3.0-0 --checksum f2997c421e45beb752673a531bf475231d183c30f7f8d5ec1a5fb68d39744d5f
 
 ENV PATH=/opt/bitnami/node/bin:/opt/bitnami/python/bin:$PATH \
     NODE_PATH=/opt/bitnami/node/lib/node_modules
+
+## STACKSMITH-END: Modifications below this line will be unchanged when regenerating
 
 # ExpressJS template
 COPY . /app
