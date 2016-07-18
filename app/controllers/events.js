@@ -1,18 +1,19 @@
 'use strict';
-// Load Event model
 var Event = require('../models/event');
-// The controllers will be function-base
+function validationErrorResponse (res, errors) {
+  res.status(400);
+  res.json(res.app.get('utils').http.getHttpError(400, errors));
+}
+function errorResponse (res, errors) {
+  res.status(500);
+  res.json(res.app.get('utils').http.getHttpError(500, errors));
+}
 module.exports = {
-  list: (req, res, next) => {
-    console.log('Processing event listing');
+  get: (req, res, next) => {
     Event.find({}, (err, data) => {
       if (err) {
         console.error(err);
-        res.status(500).json({
-          error: true,
-          code: 500,
-          message: err
-        });
+        errorResponse(res, err);
       } else {
         if (data.length === 0) {
           data = {};
@@ -21,21 +22,16 @@ module.exports = {
       }
     });
   },
-  create: (req, res, next) => {
-    console.log('Processing event creation');
+  post: (req, res, next) => {
     // Verify the data is OK
     req.checkBody('title', 'Invalid title').isValidTitle();
     req.checkBody('description', 'Invalid description').isValidDescription();
     req.checkBody('icon', 'Invalid icon').isValidIcon();
     req.checkBody('cron', 'Invalid cron').isValidCron();
     // Check for validation errors
-    var errors = req.validationErrors();
-    if (errors) {
-      res.status(400).json({
-        error: true,
-        code: 400,
-        message: errors
-      });
+    var validationErrors = req.validationErrors();
+    if (validationErrors) {
+      validationErrorResponse(res, validationErrors);
       return;
     }
     // Create the event if everything went right
@@ -48,11 +44,7 @@ module.exports = {
     newEvent.save(function (err, data) {
       if (err) {
         console.error(err);
-        res.status(500).json({
-          error: true,
-          code: 500,
-          message: err
-        });
+        errorResponse(res, err);
       } else {
         if (data.length === 0) {
           data = {};
@@ -62,29 +54,20 @@ module.exports = {
     });
   },
   show: (req, res, next) => {
-    console.log('Processing single-event fetching');
     // Check if the object ID is correct and try to find it
-    req.checkParams('event_id', 'Invalid event identifier').isValidIdentifier();
+    req.checkParams('id', 'Invalid event identifier').isValidIdentifier();
     // Check for validation errors
-    var errors = req.validationErrors();
-    if (errors) {
-      res.status(400).json({
-        error: true,
-        code: 400,
-        message: errors
-      });
+    var validationErrors = req.validationErrors();
+    if (validationErrors) {
+      validationErrorResponse(res, validationErrors);
       return;
     }
     Event.findOne({
-      '_id': req.params.event_id
+      '_id': req.params.id
     }, function (err, data) {
       if (err) {
         console.error(err);
-        res.status(500).json({
-          error: true,
-          code: 500,
-          message: err
-        });
+        errorResponse(res, err);
       } else {
         if (data.length === 0) {
           data = {};
@@ -94,26 +77,21 @@ module.exports = {
     });
   },
   edit: (req, res, next) => {
-    console.log('Processing single-event editing');
     // Verify the data is OK
-    req.checkParams('event_id', 'Invalid event identifier').isValidIdentifier();
+    req.checkParams('id', 'Invalid event identifier').isValidIdentifier();
     req.checkBody('title', 'Invalid title').isValidTitle();
     req.checkBody('description', 'Invalid description').isValidDescription();
     req.checkBody('icon', 'Invalid icon').isValidIcon();
     req.checkBody('cron', 'Invalid cron').isValidCron();
     // Check for validation errors
-    var errors = req.validationErrors();
-    if (errors) {
-      res.status(400).json({
-        error: true,
-        code: 400,
-        message: errors
-      });
+    var validationErrors = req.validationErrors();
+    if (validationErrors) {
+      validationErrorResponse(res, validationErrors);
       return;
     }
     // Update the event if it exists
     Event.findOneAndUpdate({
-      '_id': req.params.event_id
+      '_id': req.params.id
     }, {
       title: req.body.title,
       description: req.body.description,
@@ -125,11 +103,7 @@ module.exports = {
     }, function (err, data) {
       if (err) {
         console.error(err);
-        res.status(500).json({
-          error: true,
-          code: 500,
-          message: err
-        });
+        errorResponse(res, err);
       } else {
         if (data.length === 0) {
           data = {};
@@ -137,5 +111,26 @@ module.exports = {
         res.json(data);
       }
     });
-  }
+  },
+  delete: (req, res, next) => {
+    // Check if the object ID is correct and try to find it
+    req.checkParams('id', 'Invalid event identifier').isValidIdentifier();
+    // Check for validation errors
+    var validationErrors = req.validationErrors();
+    if (validationErrors) {
+      validationErrorResponse(res, validationErrors);
+      return;
+    }
+    Event.remove({
+      '_id': req.params.id
+    }, function (err) {
+      if (err) {
+        console.error(err);
+        errorResponse(res, err);
+      } else {
+        // The entry does not exist anymore
+        res.json({});
+      }
+    });
+  },
 };

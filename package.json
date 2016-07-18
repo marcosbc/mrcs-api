@@ -1,35 +1,35 @@
 {
   "name": "mrcs-api",
-  "version": "0.0.1",
-  "description": "API for creating simple and timed notifications",
+  "version": "0.1.0",
+  "description": "Simple API-based event and notifications server.",
   "main": "app/server.js",
   "scripts": {
-    "start": "node app/server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node app/server.js"
   },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/marcosbc/mrcs-api.git"
   },
   "keywords": [
+    "event",
+    "events",
+    "notification",
+    "notifications",
     "api",
-    "notifications"
+    "rest"
   ],
-  "author": "Marcos Bjoerkelund",
+  "author": "Marcos Bjørkelund",
   "license": "Apache-2.0",
   "bugs": {
     "url": "https://github.com/marcosbc/mrcs-api/issues"
   },
   "homepage": "https://github.com/marcosbc/mrcs-api#readme",
   "dependencies": {
-    "bcrypt-nodejs": "0.0.3",
-    "body-parser": "^1.15.1",
-    "express": "^4.13.4",
     "express-validator": "^2.20.8",
-    "mongoose": "^4.4.17",
-    "morgan": "^1.7.0",
-    "underscore": "^1.8.3",
+    "jsonwebtoken": "^7.1.6",
+    "microservice-skeleton": "^0.1.0",
+    "mongoose": "^4.5.5",
     "validator": "^5.4.0",
-    "wait-for-mongo": "^0.2.0"
+    "wait-for-mongoose": "^0.1.1"
   }
 }

@@ -1,15 +1,7 @@
 'use strict';
-// Load necessary models
-// var Icon = require('../models/icon');
-// Dependencies
-var _ = require('underscore');
 var validator = require('validator');
-var config;
 // Object of common-usage functions
 class ValidatorFunctions {
-  constructor (cfg) {
-    config = cfg;
-  }
   get customValidators () {
     return {
       isValidIdentifier: (value) => {
@@ -37,6 +29,6 @@ class ValidatorFunctions {
   }
 }
 // Export the previously created class
-module.exports = (config) => {
-  return new ValidatorFunctions(config);
+module.exports = () => {
+  return new ValidatorFunctions();
 };

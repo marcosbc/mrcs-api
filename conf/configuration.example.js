@@ -3,18 +3,20 @@ const config = {
   // Path where the API will be accessed from the browser
   base: '/',
   // Port which the API server will run on
-  port: 80,
-  // Different modes: 'production', 'development'
-  env: 'development',
+  port: 3000,
   // Front-end settings, for obtaining URLs
   frontend: {
     protocol: 'http',
     host: '127.0.0.1',
-    port: 50080
+    port: 3000
+  },
+  // Security-related
+  security: {
+    secret: 'secret',
+    saltRounds: 8,
+    tokenDurationMinutes: 1
   },
   // MongoDB connection string
-  mongoDbUri: 'mongodb://api:api@mongodb:27017/api',
-  // Locale for character support
-  locale: 'en-US'
+  mongoDbUri: 'mongodb://api:api@localhost:27017/api'
 };
 module.exports = config;

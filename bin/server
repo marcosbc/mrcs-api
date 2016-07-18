@@ -1,6 +1,0 @@
-#!/bin/bash
-DIR="$( cd "$( dirname "$( dirname "${BASH_SOURCE[0]}" )" )" && pwd )"
-if [ ! -d "$DIR/logs" ]; then
-    mkdir $DIR/logs
-fi
-node $DIR/app/server.js >>$DIR/logs/access.log 2>>$DIR/logs/error.log

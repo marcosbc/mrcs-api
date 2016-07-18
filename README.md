@@ -1,10 +1,12 @@
 # mrcs-api
 
+## Introduction
+
 To be completed.
 
 ## License
 
-Copyright 2016 Marcos Bjoerkelund
+Copyright 2016 Marcos Bjørkelund
 
 Licensed under the Apache License, Version 2.0 (the "License");
 you may not use this file except in compliance with the License.
