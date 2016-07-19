@@ -14,7 +14,7 @@ const config = {
   security: {
     secret: 'secret',
     saltRounds: 8,
-    tokenDurationMinutes: 1
+    tokenDurationMinutes: 60
   },
   // MongoDB connection string
   mongoDbUri: 'mongodb://api:api@localhost:27017/api'
