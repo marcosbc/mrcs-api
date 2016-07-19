@@ -10,6 +10,10 @@ eventSchema = new mongoose.Schema({
     required: true,
     default: Date.now
   },
+  ownerId: {
+    type: mongoose.Schema.Types.ObjectId,
+    required: true
+  },
   title: {
     type: String,
     required: false
