@@ -16,10 +16,14 @@ function unauthorizedResponse (res) {
 }
 function verifyToken (req, callback) {
   var secret = req.app.get('config').security.secret;
-  var token = req.headers.bearer;
-  if (typeof token === 'undefined') {
+  if (typeof req.headers.authorization === 'undefined') {
     return callback(false);
   }
+  var authorization = req.headers.authorization.split(' ');
+  if (authorization[0] !== 'Bearer' || authorization.length !== 2) {
+    return callback(false);
+  }
+  var token = authorization[1];
   Token.findOne({
     data: token
   }, (err, tokenEntry) => {
