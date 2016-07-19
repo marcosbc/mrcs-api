@@ -52,7 +52,7 @@ module.exports = {
         console.error(err);
         return errorResponse(res, err);
       }
-      if (token !== null) {
+      if (!token) {
         return unauthorizedResponse(res);
       }
       Event.find({
