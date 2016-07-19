@@ -17,6 +17,7 @@ const config = {
     tokenDurationMinutes: 60
   },
   // MongoDB connection string
-  mongoDbUri: 'mongodb://api:api@localhost:27017/api'
+  mongoDbUri: 'mongodb://api:api@localhost:27017/api',
+  mongoDbTimeout: 1000 * 60 * 2
 };
 module.exports = config;
