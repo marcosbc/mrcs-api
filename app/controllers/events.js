@@ -17,11 +17,11 @@ function unauthorizedResponse (res) {
 function verifyToken (req, callback) {
   var secret = req.app.get('config').security.secret;
   if (typeof req.headers.authorization === 'undefined') {
-    return callback(false);
+    return callback(null);
   }
   var authorization = req.headers.authorization.split(' ');
   if (authorization[0] !== 'Bearer' || authorization.length !== 2) {
-    return callback(false);
+    return callback(null);
   }
   var token = authorization[1];
   Token.findOne({
@@ -52,7 +52,7 @@ module.exports = {
         console.error(err);
         return errorResponse(res, err);
       }
-      if (!token) {
+      if (token !== null) {
         return unauthorizedResponse(res);
       }
       Event.find({
