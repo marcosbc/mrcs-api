@@ -1,66 +1,22 @@
 'use strict';
-var jwt = require('jsonwebtoken');
-var Token = require('../models/token');
 var Event = require('../models/event');
-function validationErrorResponse (res, errors) {
-  res.status(400);
-  res.json(res.app.get('utils').http.getHttpError(400, errors));
-}
-function errorResponse (res, errors) {
-  var httpUtils = res.app.get('utils').http;
-  res.status(500).json(httpUtils.getHttpError(500, errors));
-}
-function unauthorizedResponse (res) {
-  var httpUtils = res.app.get('utils').http;
-  res.status(401).json(httpUtils.getHttpError(401, 'Unauthorized'));
-}
-function verifyToken (req, callback) {
-  var secret = req.app.get('config').security.secret;
-  if (typeof req.headers.authorization === 'undefined') {
-    return callback(null);
-  }
-  var authorization = req.headers.authorization.split(' ');
-  if (authorization[0] !== 'Bearer' || authorization.length !== 2) {
-    return callback(null);
-  }
-  var token = authorization[1];
-  Token.findOne({
-    data: token
-  }, (err, tokenEntry) => {
-    if (err) {
-      return callback(null, err);
-    }
-    if (tokenEntry !== null) {
-      // Check if it has expired
-      if (tokenEntry.expirationDate > new Date()) {
-        // Verify if the signature is valid
-        return jwt.verify(token, secret, function (err, decodedToken) {
-          if (err) {
-            return callback(null, err);
-          }
-          callback(decodedToken);
-        });
-      }
-    }
-    callback(null);
-  });
-}
 module.exports = {
   get: (req, res, next) => {
-    verifyToken(req, (token, err) => {
+    var apiHttpUtils = req.app.get('apiUtils').http;
+    apiHttpUtils.verifyToken(req, (token, err) => {
       if (err) {
         console.error(err);
-        return errorResponse(res, err);
+        return apiHttpUtils.errorResponse(res, err);
       }
       if (!token) {
-        return unauthorizedResponse(res);
+        return apiHttpUtils.unauthorizedResponse(res);
       }
       Event.find({
         ownerId: token.uid
       }, (err, data) => {
         if (err) {
           console.error(err);
-          return errorResponse(res, err);
+          return apiHttpUtils.errorResponse(res, err);
         }
         if (data.length === 0) {
           data = {};
@@ -70,13 +26,14 @@ module.exports = {
     });
   },
   post: (req, res, next) => {
-    verifyToken(req, (token, err) => {
+    var apiHttpUtils = req.app.get('apiUtils').http;
+    apiHttpUtils.verifyToken(req, (token, err) => {
       if (err) {
         console.error(err);
-        return errorResponse(res, err);
+        return apiHttpUtils.errorResponse(res, err);
       }
       if (!token) {
-        return unauthorizedResponse(res);
+        return apiHttpUtils.unauthorizedResponse(res);
       }
       // Verify the data is OK
       req.checkBody('title', 'Invalid title').isValidTitle();
@@ -86,7 +43,7 @@ module.exports = {
       // Check for validation errors
       var validationErrors = req.validationErrors();
       if (validationErrors) {
-        return validationErrorResponse(res, validationErrors);
+        return apiHttpUtils.validationErrorResponse(res, validationErrors);
       }
       // Create the event if everything went right
       var newEvent = new Event({
@@ -99,7 +56,7 @@ module.exports = {
       newEvent.save((err, data) => {
         if (err) {
           console.error(err);
-          return errorResponse(res, err);
+          return apiHttpUtils.errorResponse(res, err);
         }
         if (data.length === 0) {
           data = {};
@@ -109,20 +66,21 @@ module.exports = {
     });
   },
   show: (req, res, next) => {
-    verifyToken(req, (token, err) => {
+    var apiHttpUtils = req.app.get('apiUtils').http;
+    apiHttpUtils.verifyToken(req, (token, err) => {
       if (err) {
         console.error(err);
-        return errorResponse(res, err);
+        return apiHttpUtils.errorResponse(res, err);
       }
       if (!token) {
-        return unauthorizedResponse(res);
+        return apiHttpUtils.unauthorizedResponse(res);
       }
       // Check if the object ID is correct and try to find it
       req.checkParams('id', 'Invalid event identifier').isValidIdentifier();
       // Check for validation errors
       var validationErrors = req.validationErrors();
       if (validationErrors) {
-        return validationErrorResponse(res, validationErrors);
+        return apiHttpUtils.validationErrorResponse(res, validationErrors);
       }
       Event.findOne({
         '_id': req.params.id,
@@ -130,7 +88,7 @@ module.exports = {
       }, (err, data) => {
         if (err) {
           console.error(err);
-          return errorResponse(res, err);
+          return apiHttpUtils.errorResponse(res, err);
         }
         if (data.length === 0) {
           data = {};
@@ -140,13 +98,14 @@ module.exports = {
     });
   },
   edit: (req, res, next) => {
-    verifyToken(req, (token, err) => {
+    var apiHttpUtils = req.app.get('apiUtils').http;
+    apiHttpUtils.verifyToken(req, (token, err) => {
       if (err) {
         console.error(err);
-        return errorResponse(res, err);
+        return apiHttpUtils.errorResponse(res, err);
       }
       if (!token) {
-        return unauthorizedResponse(res);
+        return apiHttpUtils.unauthorizedResponse(res);
       }
       // Verify the data is OK
       req.checkParams('id', 'Invalid event identifier').isValidIdentifier();
@@ -157,7 +116,7 @@ module.exports = {
       // Check for validation errors
       var validationErrors = req.validationErrors();
       if (validationErrors) {
-        return validationErrorResponse(res, validationErrors);
+        return apiHttpUtils.validationErrorResponse(res, validationErrors);
       }
       // Update the event if it exists
       Event.findOneAndUpdate({
@@ -174,7 +133,7 @@ module.exports = {
       }, (err, data) => {
         if (err) {
           console.error(err);
-          return errorResponse(res, err);
+          return apiHttpUtils.errorResponse(res, err);
         }
         if (data.length === 0) {
           data = {};
@@ -184,20 +143,21 @@ module.exports = {
     });
   },
   delete: (req, res, next) => {
-    verifyToken(req, (token, err) => {
+    var apiHttpUtils = req.app.get('apiUtils').http;
+    apiHttpUtils.verifyToken(req, (token, err) => {
       if (err) {
         console.error(err);
-        return errorResponse(res, err);
+        return apiHttpUtils.errorResponse(res, err);
       }
       if (!token) {
-        return unauthorizedResponse(res);
+        return apiHttpUtils.unauthorizedResponse(res);
       }
       // Check if the object ID is correct and try to find it
       req.checkParams('id', 'Invalid event identifier').isValidIdentifier();
       // Check for validation errors
       var validationErrors = req.validationErrors();
       if (validationErrors) {
-        return validationErrorResponse(res, validationErrors);
+        return apiHttpUtils.validationErrorResponse(res, validationErrors);
       }
       Event.remove({
         '_id': req.params.id,
@@ -205,11 +165,11 @@ module.exports = {
       }, (err) => {
         if (err) {
           console.error(err);
-          return errorResponse(res, err);
+          return apiHttpUtils.errorResponse(res, err);
         }
         // The entry does not exist anymore
         res.json({});
       });
     });
-  },
+  }
 };

@@ -2,6 +2,7 @@
 // Export library of functions
 module.exports = () => {
   return {
-    validators: require('./validators')()
+    validators: require('./validators')(),
+    http: require('./http')()
   };
 };
