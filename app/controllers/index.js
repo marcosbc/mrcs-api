@@ -17,7 +17,7 @@ module.exports = {
         }, {
           id: 'timetable',
           name: 'Timetable'
-        }];
+        }]
       });
     });
   }
