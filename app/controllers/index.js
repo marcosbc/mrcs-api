@@ -11,7 +11,13 @@ module.exports = {
         return apiHttpUtils.unauthorizedResponse(res);
       }
       res.json({
-        apps: ['reminders', 'timetable']
+        apps: [{
+          id: 'reminders',
+          name: 'Reminders'
+        }, {
+          id: 'timetable',
+          name: 'Timetable'
+        }];
       });
     });
   }
